@@ -3,22 +3,25 @@ import {METHOD} from  './api'
 import Vue from 'vue';
 import { Toast } from 'vant';
 import store from '../store/index'
+import router from '../router/index'
+const {baseUrl}=require('../config/env.'+process.env.NODE_ENV+".js");
 
 Vue.use(Toast);
 
 const instance=axios.create({
-    baseURL:'http://www.hj0819.top:44369',
+    // baseURL:'http://www.hj0819.top:44369',
+    baseURL:baseUrl,
     timeout:20000
 })
 
 instance.interceptors.request.use(function(res){
     // console.log(router.options.routes[0])
-    // if(!router.options.routes[0]){
-    //     Toast.loading({
-    //         message: '加载中...',
-    //         forbidClick: true,
-    //       });
-    // }
+    if(router.options.routes[0]){
+        Toast.loading({
+            message: '加载中...',
+            forbidClick: true,
+          });
+    }
     if(store.state.token){
         res.headers.token=  store.state.token
     }
